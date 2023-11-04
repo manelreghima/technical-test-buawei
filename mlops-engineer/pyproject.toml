@@ -1,0 +1,33 @@
+[build-system]
+requires = ["setuptools>=43.0.0", "wheel"]
+
+[project]
+name = "inference-server"
+version = "0.1.0"
+dependencies = [
+  "fastapi >= 0.104.0",
+  "onnxruntime >= 1.16.0",
+  "pillow >= 10.1.0",
+  "pydantic >= 2.3.0",
+  "pydantic-settings >= 2.0.3",
+  "uvicorn >= 0.23.0"
+]
+
+[project.optional-dependencies]
+dev = [
+  "black",
+  "mypy",
+  "pre-commit",
+  "isort"
+]
+
+test = [
+  "pytest",
+  "coverage"
+]
+
+[tool.setuptools]
+packages = ["inference_server"]
+
+[tool.isort]
+profile = "black"
