@@ -1,9 +1,17 @@
 import xml.etree.ElementTree as ET
 import json
 import os
+from datetime import datetime
 
 def voc_to_coco(voc_dir, output_file):
     coco_data = {
+        "info": {
+            "description": "COCO Buawei test Dataset",
+            "version": "1.0",
+            "year": 2023,
+            "contributor": "Manel Reghima",
+            "date_created": datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        },
         "images": [],
         "annotations": [],
         "categories": []
