@@ -18,6 +18,7 @@ python -m data_provider serve \
     [--max-delay MAX_DELAY]
 ```
 python -m data_provider serve "http://127.0.0.1:8000/upload" --min-delay 1000 --max-delay 1000
+python -m data_provider serve ENDPOINT --min-delay 1000 --max-delay 1000
 
 Un processus est alors lancé et des annotations sont générées puis envoyées via des requêtes HTTP vers `ENDPOINT`. Ces requêtes transportent une archive zip contennant un ensemble d'annotations au format XML et des fichiers JPG. Les fichiers JPG sont vides, on ne les utilisera que pour simuler des images.   
 Les paramètres `--min-delay` et `--max-delay` permettent de faire varier les délais minimum et maximum entre deux requêtes. Par défaut, ces valeurs valent 1000, ce qui correspond à 1000 millisecondes.
@@ -41,7 +42,7 @@ DONE
 DONE
 
 3. Finalement, mettez en place une API HTTP permettant d'ingérer les nouvelles annotations générées par `data-provider` en mode continu. Proposez une structure de système de fichiers permettant de stocker ces données. Par exemple, un dossier `images` avec toutes les images et un dossier `annotations` pour stocker toutes les annotations.
-curl -X POST -F "file=@./images/fd8fc947-98cd-494e-914c-b368a3217871.zip" http://127.0.0.1:8000/upload
+curl -X POST -F "file=@./images/06052e38-4052-4ba6-b99d-575380a78ac2.zip" http://127.0.0.1:8000/upload
 
 4. BONUS : Mettez en place quelques endpoints permettent de requêter des annotations sous certains critères. Par exemple, un endpoint `/search/3/annotations?min_width=100&max_width=1000` renverrait un sous-dataset contennant les annotations correspondant à des bounding box ayant une largeur entre 100 et 1000 pour le dataset avec id 3, ainsi que les images et catégories associées.
 
