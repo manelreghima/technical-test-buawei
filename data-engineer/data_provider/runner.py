@@ -42,7 +42,8 @@ annotation_template = """
 def generate_annotations(n: int, output_dir: pathlib.Path | None = None) -> pathlib.Path:
     # Dataset folder
     if output_dir is None:
-        root_dir = pathlib.Path("/tmp/buawei")
+        #root_dir = pathlib.Path("/tmp/buawei")
+        root_dir = pathlib.Path("./images")
         base_path = root_dir / str(uuid())
     else:
         root_dir = output_dir
