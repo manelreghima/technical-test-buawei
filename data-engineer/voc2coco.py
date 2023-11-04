@@ -1,11 +1,6 @@
-# main.py
 import xml.etree.ElementTree as ET
 import json
 import os
-from fastapi import FastAPI, File, UploadFile, HTTPException
-from zipfile import ZipFile
-
-app = FastAPI()
 
 def voc_to_coco(voc_dir, output_file):
     coco_data = {
@@ -84,30 +79,6 @@ def voc_to_coco(voc_dir, output_file):
     with open(output_file, 'w') as f:
         json.dump(coco_data, f, indent=2)
 
-@app.post("/ingest-data")
-async def ingest_data(file: UploadFile = File(...)):
-    try:
-        # Save uploaded file to temporary location
-        temp_file_path = f"C:/Users/Manel/Desktop/buawei/data-engineer/temp/{file.filename}"
-        with open(temp_file_path, 'wb') as f:
-            f.write(file.file.read())
-        
-        # Unzip file and process contents
-        with ZipFile(temp_file_path, 'r') as zip_ref:
-            zip_ref.extractall("data")
-        
-        # Convert VOC to COCO format
-        voc_dir = 'C:/Users/Manel/Desktop/buawei/images/5db144f2-03ab-42a8-a71c-81732847dd8a'
-        output_file = 'C:/Users/Manel/Desktop/buawei/anno.json'
-        voc_to_coco(voc_dir, output_file)
-        
-        # Delete temporary file
-        os.remove(temp_file_path)
-        
-        return {"message": "Data ingested successfully"}
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
-
-if __name__ == "__main__":
-    import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+voc_dir = './images/06052e38-4052-4ba6-b99d-575380a78ac2'
+output_file = './coco_format.json'
+voc_to_coco(voc_dir, output_file)
