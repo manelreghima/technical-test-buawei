@@ -1,0 +1,30 @@
+[build-system]
+requires = ["setuptools>=43.0.0", "wheel"]
+
+[project]
+name = "data-provider"
+version = "0.1.0"
+dependencies = [
+  "httpx >= 0.25.0",
+  "pydantic >= 2.3.0",
+  "typer >= 0.6.0"
+]
+
+[project.optional-dependencies]
+dev = [
+  "black",
+  "mypy",
+  "pre-commit",
+  "isort"
+]
+
+test = [
+  "pytest",
+  "coverage"
+]
+
+[tool.setuptools]
+packages = ["data_provider"]
+
+[tool.isort]
+profile = "black"

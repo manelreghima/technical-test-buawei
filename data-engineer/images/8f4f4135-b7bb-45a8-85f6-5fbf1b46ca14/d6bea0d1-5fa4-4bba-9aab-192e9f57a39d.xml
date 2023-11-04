@@ -1,0 +1,42 @@
+
+<annotation>
+  <folder>8f4f4135-b7bb-45a8-85f6-5fbf1b46ca14</folder>
+  <filename>d6bea0d1-5fa4-4bba-9aab-192e9f57a39d.jpg</filename>
+  <path>images\8f4f4135-b7bb-45a8-85f6-5fbf1b46ca14\d6bea0d1-5fa4-4bba-9aab-192e9f57a39d.jpg</path>
+  <source>
+    <database>02</database>
+  </source>
+  <size>
+    <width>900</width>
+    <height>675</height>
+    <depth>3</depth>
+  </size>
+  <segmented>0</segmented>
+  
+    <object>
+    <name>08</name>
+    <pose>Unspecified</pose>
+    <truncated>0</truncated>
+    <difficult>0</difficult>
+    <bndbox>
+      <xmin>842</xmin>
+      <ymin>386</ymin>
+      <xmax>358</xmax>
+      <ymax>614</ymax>
+    </bndbox>
+  </object>
+
+    <object>
+    <name>05</name>
+    <pose>Unspecified</pose>
+    <truncated>0</truncated>
+    <difficult>0</difficult>
+    <bndbox>
+      <xmin>545</xmin>
+      <ymin>177</ymin>
+      <xmax>697</xmax>
+      <ymax>531</ymax>
+    </bndbox>
+  </object>
+
+</annotation>
