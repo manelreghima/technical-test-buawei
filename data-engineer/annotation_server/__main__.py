@@ -1,5 +1,11 @@
-from fastapi import FastAPI, HTTPException, Query
+from fastapi import FastAPI, HTTPException, Query,File, UploadFile
 import json
+from fastapi.responses import JSONResponse
+import shutil
+import os
+import zipfile
+from datetime import datetime
+from pathlib import Path
 
 app = FastAPI()
 
@@ -40,6 +46,53 @@ async def search_annotations(
     }
 
     return response_data
+
+IMAGES_DIR = Path("./directory/images")
+ANNOTATIONS_DIR = Path("./directory/annotations")
+
+# Ensure the directories exist
+IMAGES_DIR.mkdir(parents=True, exist_ok=True)
+ANNOTATIONS_DIR.mkdir(parents=True, exist_ok=True)
+
+@app.post("/upload")
+async def upload_file(file: UploadFile = File(...)):
+    try:
+        # Save the uploaded zip file to a temporary location
+        timestamp = datetime.now().strftime("%Y%m%dT%H%M%S%f")
+        temp_file_path = ANNOTATIONS_DIR / f"temp-{timestamp}.zip"
+        with open(temp_file_path, 'wb') as buffer:
+            shutil.copyfileobj(file.file, buffer)
+
+        # Unzip the file
+        with zipfile.ZipFile(temp_file_path, 'r') as zip_ref:
+            zip_ref.extractall(ANNOTATIONS_DIR)
+
+            # Process each file in the archive
+            for file_info in zip_ref.infolist():
+                file_path = Path(file_info.filename)  # Convert to Path object to handle paths
+                if file_path.suffix.lower() == '.jpg':
+                    # Create the directory structure within IMAGES_DIR if not exists
+                    image_dir = IMAGES_DIR / file_path.parent
+                    image_dir.mkdir(parents=True, exist_ok=True)
+                    # Move image to IMAGES_DIR
+                    source = ANNOTATIONS_DIR / file_info.filename
+                    destination = image_dir / file_path.name
+                    shutil.move(str(source), str(destination))
+                elif file_path.suffix.lower() == '.xml':
+                    # Process annotation file (XML)
+                    # For now, we just leave it in the ANNOTATIONS_DIR
+                    pass
+                # Add more conditions if there are other file types
+
+        # Delete the temporary zip file
+        os.remove(temp_file_path)
+
+        return JSONResponse(status_code=200, content={"message": "File uploaded and processed successfully"})
+
+    except Exception as e:
+        # If anything goes wrong, return an error message
+        print(f"An error occurred: {e}")
+        return JSONResponse(status_code=500, content={"message": f"An error occurred: {e}"})
 
 if __name__ == "__main__":
     import uvicorn
