@@ -17,13 +17,15 @@ python -m data_provider serve \
     [--min-delay MIN_DELAY] \
     [--max-delay MAX_DELAY]
 ```
+python -m data_provider serve "http://127.0.0.1:8000/upload" --min-delay 1000 --max-delay 1000
+
 Un processus est alors lancé et des annotations sont générées puis envoyées via des requêtes HTTP vers `ENDPOINT`. Ces requêtes transportent une archive zip contennant un ensemble d'annotations au format XML et des fichiers JPG. Les fichiers JPG sont vides, on ne les utilisera que pour simuler des images.   
 Les paramètres `--min-delay` et `--max-delay` permettent de faire varier les délais minimum et maximum entre deux requêtes. Par défaut, ces valeurs valent 1000, ce qui correspond à 1000 millisecondes.
 
 Pour exécuter `data-provider` en mode hors-ligne, et générer un nombre fixe de nouvelles annotations, on peut appeler
 ```python
 python -m data_provider generate N [--output-dir OUTPUT_DIR]C:/Users/Manel/Desktop/buawei/images
-python -m data_provider generate 20 --output-dir C:/Users/Manel/Desktop/buawei/images
+python -m data_provider generate 50 --output-dir ./images
 
 ```
 avec `N` le nombre d'annotations à générer. Cette commande permet de générer des nouvelles annotations comme celles générées par le mode continu.  
@@ -33,11 +35,13 @@ Pour plus d'information sur l'exécution de `data-provider`, vous pouvez utilise
 
 ## Instructions
 1. Proposez un pipeline hors-ligne d'ingestion des annotations Pascal VOC pour son stockage au format [COCO](https://cocodataset.org/#home), c'est-à-dire un script permettant de transformer les annotations Pascal VOC fournies en format COCO. 
+DONE
 
 2. Mettez en place des tests dd validation du contenu des annotations. Par exemple, au format COCO, le champ `bbox` correspond aux coordonnées d'un rectangle au format `[x, y, w, h]`, donc il faut vérifier que `w` et `h` (largeur et hauteur) sont strictement positives.
+DONE
 
 3. Finalement, mettez en place une API HTTP permettant d'ingérer les nouvelles annotations générées par `data-provider` en mode continu. Proposez une structure de système de fichiers permettant de stocker ces données. Par exemple, un dossier `images` avec toutes les images et un dossier `annotations` pour stocker toutes les annotations.
-curl -X POST -F "file=@C:/Users/Manel/Desktop/buawei/images/5db144f2-03ab-42a8-a71c-81732847dd8a.zip" http://127.0.0.1:8000/upload
+curl -X POST -F "file=@./images/fd8fc947-98cd-494e-914c-b368a3217871.zip" http://127.0.0.1:8000/upload
 
 4. BONUS : Mettez en place quelques endpoints permettent de requêter des annotations sous certains critères. Par exemple, un endpoint `/search/3/annotations?min_width=100&max_width=1000` renverrait un sous-dataset contennant les annotations correspondant à des bounding box ayant une largeur entre 100 et 1000 pour le dataset avec id 3, ainsi que les images et catégories associées.
 
