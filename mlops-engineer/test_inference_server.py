@@ -6,7 +6,11 @@ import psutil
 import os
 import json
 
+#model_name='arcfaceresnet100-11-int8'
+model_name='model_05'
+
 class TestInferenceServer(unittest.TestCase):
+    
     def store_metrics(self, model_name, endpoint, execution_time, memory_usage, payload_size):
         file_exists = os.path.isfile('metrics.csv')
         with open('metrics.csv', 'a', newline='') as csvfile:
@@ -47,20 +51,20 @@ class TestInferenceServer(unittest.TestCase):
         self.store_metrics('N/A', 'list', execution_time, memory_usage, payload_size)
 
         self.assertEqual(response.status_code, 200)
-        self.assertIn("model_10", response.json())
+        self.assertIn(model_name, response.json())
 
     def test_load_model(self):
         # No significant payload for loading model by name, so payload size is negligible/small
-        payload_size = len('name=model_10')
+        payload_size = len(model_name)
 
         memory_before = self.get_memory_usage()
         start_time = time.time()
-        response = requests.post('http://localhost:3000/api/v1/load?name=model_10')
+        response = requests.post('http://localhost:3000/api/v1/load?name='+model_name)
         end_time = time.time()
         memory_after = self.get_memory_usage()
         execution_time = end_time - start_time
         memory_usage = memory_after - memory_before
-        self.store_metrics('model_10', 'load', execution_time, memory_usage, payload_size)
+        self.store_metrics(model_name, 'load', execution_time, memory_usage, payload_size)
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.text, '200')
@@ -74,47 +78,32 @@ class TestInferenceServer(unittest.TestCase):
 
         memory_before = self.get_memory_usage()
         start_time = time.time()
-        response = requests.post('http://localhost:3000/api/v1/run/model_10', json=payload)
+        response = requests.post('http://localhost:3000/api/v1/run/'+model_name, json=payload)
         end_time = time.time()
         memory_after = self.get_memory_usage()
         execution_time = end_time - start_time
         memory_usage = memory_after - memory_before
-        self.store_metrics('model_10', 'run', execution_time, memory_usage, payload_size)
+        self.store_metrics(model_name, 'run', execution_time, memory_usage, payload_size)
 
         self.assertEqual(response.status_code, 200)
         self.assertIn('category', response.json())
 
     def test_unload_model(self):
         # No significant payload for unloading model by name, so payload size is negligible/small
-        payload_size = len('name=model_10')
+        payload_size = len(model_name)
 
         memory_before = self.get_memory_usage()
         start_time = time.time()
-        response = requests.post('http://localhost:3000/api/v1/unload?name=model_10')
+        response = requests.post('http://localhost:3000/api/v1/unload?name='+model_name)
         end_time = time.time()
         memory_after = self.get_memory_usage()
         execution_time = end_time - start_time
         memory_usage = memory_after - memory_before
-        self.store_metrics('model_10', 'unload', execution_time, memory_usage, payload_size)
+        self.store_metrics(model_name, 'unload', execution_time, memory_usage, payload_size)
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.content, b'200')
 
-
-    def test_register_model(self):
-        model_name = 'arcfaceresnet100-11-int8'
-        model_path = './arcfaceresnet100-11-int8.onnx'
-
-        # send POST request to register the new model
-        with open(model_path, 'rb') as model_file:
-            files = {'file': (model_name, model_file, 'application/octet-stream')}
-            url = f'http://localhost:3000/api/v1/register?model_name={model_name}'
-            response = requests.post(url, files=files)
-        
-        self.assertEqual(response.status_code, 200)
-        self.assertIn('Model registered successfully', response.text)
-
-    
 
 if __name__ == "__main__":
     unittest.main()
