@@ -47,8 +47,8 @@ async def search_annotations(
 
     return response_data
 
-IMAGES_DIR = Path("./directory/images")
-ANNOTATIONS_DIR = Path("./directory/annotations")
+IMAGES_DIR = Path("./data_continuous_mode/images")
+ANNOTATIONS_DIR = Path("./data_continuous_mode/annotations")
 
 # Ensure the directories exist
 IMAGES_DIR.mkdir(parents=True, exist_ok=True)
