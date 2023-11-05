@@ -1,6 +1,8 @@
 import requests
 import unittest
 import random
+# The expected new version of the model
+expected_version='model_10'
 class TestInferenceServer(unittest.TestCase):
 
 
@@ -19,7 +21,7 @@ class TestInferenceServer(unittest.TestCase):
         # Check if the response is a list, then the list itself is the versions info
         if isinstance(versions_info, list):
             # Check if the expected version exists
-            expected_version = 'model_08'  # The expected new version of the model
+            
             self.assertIn(expected_version, versions_info)
         else:
             # If it's not a list, check that the response contains version information as a key
@@ -53,23 +55,26 @@ class TestInferenceServer(unittest.TestCase):
         This assumes that the server can handle two versions and return their performance.
         """
         # Load models for A/B testing
+        load_v8=self.load_model('model_08')
+        load_v10=self.load_model('model_10')
         # Inside test_ab_testing method, replace calls to run_inference_for_model with:
         with open('./image_64.json', 'r') as file:
             image_data = file.read()
         sample_payload = {"image": image_data}
-        response_v640 = self.run_inference_for_model('model_08', sample_payload)
-        response_v320 = self.run_inference_for_model('model_10', sample_payload)
+        
+        response_v8 = self.run_inference_for_model('model_08', sample_payload)
+        response_v10 = self.run_inference_for_model(expected_version, sample_payload)
 
 
-        self.assertEqual(response_v640.status_code, 200)
-        self.assertEqual(response_v320.status_code, 200)
+        self.assertEqual(response_v8.status_code, 200)
+        self.assertEqual(response_v10.status_code, 200)
 
         # Run inferences for A/B testing
         for _ in range(10):
-            response_v640_inference = self.run_inference_for_model('model_08',sample_payload)
-            response_v320_inference = self.run_inference_for_model('model_10',sample_payload)
-            self.assertEqual(response_v640_inference.status_code, 200)
-            self.assertEqual(response_v320_inference.status_code, 200)
+            response_v8_inference = self.run_inference_for_model('model_08',sample_payload)
+            response_v10_inference = self.run_inference_for_model(expected_version,sample_payload)
+            self.assertEqual(response_v8_inference.status_code, 200)
+            self.assertEqual(response_v10_inference.status_code, 200)
     
     def test_canary_release(self):
         """
@@ -97,11 +102,7 @@ class TestInferenceServer(unittest.TestCase):
             model_to_call = model_new_version if random.random() < canary_percentage else model_old_version
             response = self.run_inference_for_model(model_to_call, sample_payload)
             self.assertEqual(response.status_code, 200)
-
-        # Here you might want to collect and compare performance metrics, such as latency and accuracy
-        # between the two model versions. For simplicity, this is not included here.
         
-
     
 if __name__ == "__main__":
     unittest.main()
