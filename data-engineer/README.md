@@ -26,7 +26,7 @@ Les paramètres `--min-delay` et `--max-delay` permettent de faire varier les d�
 Pour exécuter `data-provider` en mode hors-ligne, et générer un nombre fixe de nouvelles annotations, on peut appeler
 ```python
 python -m data_provider generate N [--output-dir OUTPUT_DIR]C:/Users/Manel/Desktop/buawei/images
-python -m data_provider generate 50 --output-dir ./images
+python -m data_provider generate 20 --output-dir ./images
 
 ```
 avec `N` le nombre d'annotations à générer. Cette commande permet de générer des nouvelles annotations comme celles générées par le mode continu.  

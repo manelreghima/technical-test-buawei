@@ -8,7 +8,7 @@ if defined _OLD_CODEPAGE (
     "%SystemRoot%\System32\chcp.com" 65001 > nul
 )
 
-set VIRTUAL_ENV=C:\Users\Manel\Desktop\buawei\mlops-engineer\venv
+set VIRTUAL_ENV=C:\Users\Manel\Desktop\technical-test-buawei\mlops-engineer\venv
 
 if not defined PROMPT set PROMPT=$P$G
 

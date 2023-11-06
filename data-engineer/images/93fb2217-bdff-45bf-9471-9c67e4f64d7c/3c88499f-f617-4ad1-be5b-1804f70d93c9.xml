@@ -1,0 +1,81 @@
+
+<annotation>
+  <folder>93fb2217-bdff-45bf-9471-9c67e4f64d7c</folder>
+  <filename>3c88499f-f617-4ad1-be5b-1804f70d93c9.jpg</filename>
+  <path>images\93fb2217-bdff-45bf-9471-9c67e4f64d7c\3c88499f-f617-4ad1-be5b-1804f70d93c9.jpg</path>
+  <source>
+    <database>01</database>
+  </source>
+  <size>
+    <width>900</width>
+    <height>675</height>
+    <depth>3</depth>
+  </size>
+  <segmented>0</segmented>
+  
+    <object>
+    <name>02</name>
+    <pose>Unspecified</pose>
+    <truncated>0</truncated>
+    <difficult>0</difficult>
+    <bndbox>
+      <xmin>713</xmin>
+      <ymin>1</ymin>
+      <xmax>525</xmax>
+      <ymax>194</ymax>
+    </bndbox>
+  </object>
+
+    <object>
+    <name>03</name>
+    <pose>Unspecified</pose>
+    <truncated>0</truncated>
+    <difficult>0</difficult>
+    <bndbox>
+      <xmin>514</xmin>
+      <ymin>596</ymin>
+      <xmax>456</xmax>
+      <ymax>21</ymax>
+    </bndbox>
+  </object>
+
+    <object>
+    <name>05</name>
+    <pose>Unspecified</pose>
+    <truncated>0</truncated>
+    <difficult>0</difficult>
+    <bndbox>
+      <xmin>840</xmin>
+      <ymin>514</ymin>
+      <xmax>525</xmax>
+      <ymax>141</ymax>
+    </bndbox>
+  </object>
+
+    <object>
+    <name>00</name>
+    <pose>Unspecified</pose>
+    <truncated>0</truncated>
+    <difficult>0</difficult>
+    <bndbox>
+      <xmin>707</xmin>
+      <ymin>362</ymin>
+      <xmax>183</xmax>
+      <ymax>202</ymax>
+    </bndbox>
+  </object>
+
+    <object>
+    <name>05</name>
+    <pose>Unspecified</pose>
+    <truncated>0</truncated>
+    <difficult>0</difficult>
+    <bndbox>
+      <xmin>875</xmin>
+      <ymin>131</ymin>
+      <xmax>652</xmax>
+      <ymax>596</ymax>
+    </bndbox>
+  </object>
+
+</annotation>

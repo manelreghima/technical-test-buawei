@@ -9,7 +9,7 @@ from pathlib import Path
 
 app = FastAPI()
 
-# Load the annotations from coco_format.json at startup
+# Load the annotations from coco_format.json
 with open('coco_format.json') as f:
     data = json.load(f)
 

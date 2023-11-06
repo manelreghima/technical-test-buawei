@@ -1,10 +1,9 @@
-import onnxruntime as ort
 import os
 from typing import List
 import numpy as np
 import onnxruntime as ort
-
-from fastapi import FastAPI, File, UploadFile, HTTPException,Query,Depends, Request
+import onnx
+from fastapi import FastAPI, File, UploadFile, HTTPException,Query,Depends, Request,APIRouter
 
 from inference_server.config import settings
 from inference_server.models import Model
@@ -49,7 +48,6 @@ def unload_model(name: str):
     return 200
 
 
-
 @app.post("/api/v1/register")
 async def register_model(
     model_name: str = Query(..., description="The name of the model to register"),
@@ -76,7 +74,7 @@ async def register_model(
     return {"message": "Model registered successfully"}
 
 
-
+    
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run(app, host="0.0.0.0", port=3000)
