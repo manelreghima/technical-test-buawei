@@ -7,13 +7,13 @@ import os
 import json
 
 #model_name='arcfaceresnet100-11-int8'
-model_name='model_05'
+model_name='model_10'
 
 class TestInferenceServer(unittest.TestCase):
     
     def store_metrics(self, model_name, endpoint, execution_time, memory_usage, payload_size):
-        file_exists = os.path.isfile('metrics.csv')
-        with open('metrics.csv', 'a', newline='') as csvfile:
+        file_exists = os.path.isfile('./metrics.csv')
+        with open('./metrics.csv', 'a', newline='') as csvfile:
             writer = csv.writer(csvfile)
             if not file_exists:
                 writer.writerow(['Model Name', 'Endpoint', 'Execution Time', 'Memory Usage (MB)', 'Payload Size (Bytes)'])
