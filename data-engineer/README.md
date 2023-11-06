@@ -42,7 +42,9 @@ DONE
 DONE
 
 3. Finalement, mettez en place une API HTTP permettant d'ingérer les nouvelles annotations générées par `data-provider` en mode continu. Proposez une structure de système de fichiers permettant de stocker ces données. Par exemple, un dossier `images` avec toutes les images et un dossier `annotations` pour stocker toutes les annotations.
-curl -X POST -F "file=@./images/6c171619-54c0-431e-9ab6-dd75e97018f0.zip" http://127.0.0.1:8000/upload
+python -m data_provider serve "http://127.0.0.1:8000/upload" --min-delay 1000 --max-delay 1000
+
+curl -X POST -F "file=@./images/542ad8b7-cc55-4a9c-be40-e61f64501c12.zip" http://127.0.0.1:8000/upload
 
 4. BONUS : Mettez en place quelques endpoints permettent de requêter des annotations sous certains critères. Par exemple, un endpoint `/search/3/annotations?min_width=100&max_width=1000` renverrait un sous-dataset contennant les annotations correspondant à des bounding box ayant une largeur entre 100 et 1000 pour le dataset avec id 3, ainsi que les images et catégories associées.
 
