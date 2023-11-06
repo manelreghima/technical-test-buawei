@@ -13,7 +13,7 @@ app = FastAPI()
 with open('coco_format.json') as f:
     data = json.load(f)
 
-@app.get("/search/{dataset_id}/annotations")
+@app.get("/search/{dataset_id}/annotations") 
 async def search_annotations(
     dataset_id: int,
     min_width: int = Query(100, alias="minWidth"),  # Alias to match query parameter naming conventions if needed
@@ -78,11 +78,6 @@ async def upload_file(file: UploadFile = File(...)):
                     source = ANNOTATIONS_DIR / file_info.filename
                     destination = image_dir / file_path.name
                     shutil.move(str(source), str(destination))
-                elif file_path.suffix.lower() == '.xml':
-                    # Process annotation file (XML)
-                    # For now, we just leave it in the ANNOTATIONS_DIR
-                    pass
-                # Add more conditions if there are other file types
 
         # Delete the temporary zip file
         os.remove(temp_file_path)
