@@ -1,8 +1,10 @@
 import requests
 import unittest
 import random
-# The expected new version of the model
-expected_version='model_10'
+
+# Load models for canary release testing
+model_old_version = 'model_08'
+model_new_version = 'model_10'
 class TestInferenceServer(unittest.TestCase):
 
 
@@ -22,19 +24,16 @@ class TestInferenceServer(unittest.TestCase):
         if isinstance(versions_info, list):
             # Check if the expected version exists
             
-            self.assertIn(expected_version, versions_info)
+            self.assertIn(model_new_version, versions_info)
         else:
             # If it's not a list, check that the response contains version information as a key
             self.assertIn('versions', versions_info)
 
             # Check if the expected version exists within the 'versions' key
-            self.assertIn(expected_version, versions_info['versions'])
+            self.assertIn(model_new_version, versions_info['versions'])
 
     
     def load_model(self, model_name):
-        """
-        Helper method to load a model onto the server.
-        """
         response = requests.post(f'http://localhost:3000/api/v1/load?name={model_name}')
         self.assertEqual(response.status_code, 200, f"Failed to load model {model_name}: {response.text}")
         return response
@@ -55,15 +54,15 @@ class TestInferenceServer(unittest.TestCase):
         This assumes that the server can handle two versions and return their performance.
         """
         # Load models for A/B testing
-        load_v8=self.load_model('model_08')
-        load_v10=self.load_model('model_10')
+        load_v8=self.load_model(model_old_version)
+        load_v10=self.load_model(model_new_version)
         # Inside test_ab_testing method, replace calls to run_inference_for_model with:
         with open('./image_64.json', 'r') as file:
             image_data = file.read()
         sample_payload = {"image": image_data}
         
-        response_v8 = self.run_inference_for_model('model_08', sample_payload)
-        response_v10 = self.run_inference_for_model(expected_version, sample_payload)
+        response_v8 = self.run_inference_for_model(model_old_version, sample_payload)
+        response_v10 = self.run_inference_for_model(model_new_version, sample_payload)
 
 
         self.assertEqual(response_v8.status_code, 200)
@@ -71,8 +70,8 @@ class TestInferenceServer(unittest.TestCase):
 
         # Run inferences for A/B testing
         for _ in range(10):
-            response_v8_inference = self.run_inference_for_model('model_08',sample_payload)
-            response_v10_inference = self.run_inference_for_model(expected_version,sample_payload)
+            response_v8_inference = self.run_inference_for_model(model_old_version,sample_payload)
+            response_v10_inference = self.run_inference_for_model(model_new_version,sample_payload)
             self.assertEqual(response_v8_inference.status_code, 200)
             self.assertEqual(response_v10_inference.status_code, 200)
     
@@ -82,9 +81,7 @@ class TestInferenceServer(unittest.TestCase):
         This will send a certain percentage of inference requests to the new model version
         and the rest to the old one.
         """
-        # Load models for canary release testing
-        model_old_version = 'model_08'
-        model_new_version = 'model_10'
+        
         self.load_model(model_old_version)
         self.load_model(model_new_version)
 
@@ -103,6 +100,13 @@ class TestInferenceServer(unittest.TestCase):
             response = self.run_inference_for_model(model_to_call, sample_payload)
             self.assertEqual(response.status_code, 200)
         
+    def test_unload_model(self):
     
+        response = requests.post('http://localhost:3000/api/v1/unload?name='+model_new_version)
+        response = requests.post('http://localhost:3000/api/v1/unload?name='+model_old_version)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.content, b'200')
+
 if __name__ == "__main__":
     unittest.main()
