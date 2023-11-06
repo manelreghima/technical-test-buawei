@@ -38,7 +38,19 @@ annotation_template = """
   {objects}
 </annotation>
 """
-
+def safe_delete(file_path, max_retries=5, delay=1.0):
+    """Attempt to delete a file with retries and a delay."""
+    for attempt in range(max_retries):
+        try:
+            file_path.unlink()
+            break  # If the delete was successful, break out of the loop
+        except PermissionError as e:
+            if attempt < max_retries - 1:
+                time.sleep(delay)  # Wait before retrying
+            else:
+                print(f"Failed to delete file {file_path} after {max_retries} attempts.")
+                raise e  # If all retries fail, re-raise the exception
+                
 def generate_annotations(n: int, output_dir: pathlib.Path | None = None) -> pathlib.Path:
     # Dataset folder
     if output_dir is None:
@@ -101,15 +113,25 @@ class Runner(threading.Thread):
         
         return random.randint(self.min_delay, self.max_delay + 1)
 
+    
+
+
     def send(self):
+        # Generate the archive with annotations
         archive_path = generate_annotations(random.randint(1, 10))
         try:
-            httpx.post(self.endpoint, files={"export": open(archive_path, "rb")})
+            # Send the archive to the endpoint
+            with open(archive_path, "rb") as file:
+                httpx.post(self.endpoint, files={"export": file})
         except Exception as e:
             print(e)
         finally:
-            archive_path.unlink()
-            shutil.rmtree(archive_path.with_suffix(""))
+            # Delete the archive
+            safe_delete(archive_path)
+            # Also delete the directory that was created during the archive creation
+            if archive_path.exists():
+                shutil.rmtree(archive_path.parent, ignore_errors=True)
+
 
     def run(self):
         delay = self.get_random_delay()
