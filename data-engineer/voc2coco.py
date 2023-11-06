@@ -13,7 +13,7 @@ def voc_to_coco(voc_dir, output_file):
     category_id_map = {}
     next_category_id = 1
     
-    # Get list of VOC files from the given directory
+    # Get list of VOC files from ./images
     voc_files = [f for f in os.listdir(voc_dir) if f.endswith('.xml')]
     
     # Process each VOC file
@@ -75,10 +75,16 @@ def voc_to_coco(voc_dir, output_file):
                     "id": len(coco_data['annotations']) + 1
                 })
     
-    # Save COCO data to output file
+    # Save COCO data to output file coco_format.json
     with open(output_file, 'w') as f:
         json.dump(coco_data, f, indent=2)
 
-voc_dir = './images/06052e38-4052-4ba6-b99d-575380a78ac2'
+base_dir = './images'
+voc_dirs = [os.path.join(base_dir, d) for d in os.listdir(base_dir) if os.path.isdir(os.path.join(base_dir, d))]
+if not voc_dirs:
+    raise FileNotFoundError("No subdirectories found in './images'")
+# Use the first directory found
+voc_dir = voc_dirs[0]  
+
 output_file = './coco_format.json'
 voc_to_coco(voc_dir, output_file)
