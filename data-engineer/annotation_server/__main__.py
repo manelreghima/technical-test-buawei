@@ -57,7 +57,7 @@ ANNOTATIONS_DIR.mkdir(parents=True, exist_ok=True)
 @app.post("/upload")
 async def upload_file(file: UploadFile = File(...)):
     try:
-        # Save the uploaded zip file to a temporary location
+        # Save the uploaded zip file to a temporary location (Safe upload handling)
         timestamp = datetime.now().strftime("%Y%m%dT%H%M%S%f")
         temp_file_path = ANNOTATIONS_DIR / f"temp-{timestamp}.zip"
         with open(temp_file_path, 'wb') as buffer:
