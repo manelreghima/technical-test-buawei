@@ -6,7 +6,6 @@ import psutil
 import os
 import time
 
-# Load models for canary release testing
 model_old_version = 'model_08'
 model_new_version = 'model_10'
 
@@ -55,6 +54,7 @@ class TestInferenceServer(unittest.TestCase):
     def test_ab_testing(self):
         self.load_model(model_old_version)
         self.load_model(model_new_version)
+
         with open('./image_64.json', 'r') as file:
             image_data = file.read()
         sample_payload = {"image": image_data}
@@ -80,7 +80,9 @@ class TestInferenceServer(unittest.TestCase):
     def test_canary_release(self):
         self.load_model(model_old_version)
         self.load_model(model_new_version)
+
         canary_percentage = 0.10
+        
         with open('./image_64.json', 'r') as file:
             image_data = file.read()
         sample_payload = {"image": image_data}
