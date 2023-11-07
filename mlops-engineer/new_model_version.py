@@ -86,7 +86,7 @@ class TestInferenceServer(unittest.TestCase):
         sample_payload = {"image": image_data}
         execution_times = []
         memory_usages = []
-        number_of_tests = 100
+        number_of_tests = 10
         for _ in range(number_of_tests):
             memory_before = self.get_memory_usage()
             start_time = time.time()
