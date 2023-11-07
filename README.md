@@ -18,7 +18,7 @@ pip install .
 ### Generate a fixed number of new annotations
 ```bash
 python -m data_provider generate 20 --output-dir ./images
-
+```
 # Data MLops Test
 ## Install Requirements
 ### Access the 'mlops-engineer' folder
