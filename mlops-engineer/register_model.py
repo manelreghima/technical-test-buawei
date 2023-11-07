@@ -9,7 +9,7 @@ class TestInferenceServer(unittest.TestCase):
 
         # send POST request to register the new model
         with open(model_path, 'rb') as model_file:
-            files = {'file': (new_model_name, model_file, 'application/octet-stream')}
+            files = {'file': (new_model_name, model_file)}
             url = f'http://localhost:3000/api/v1/register?model_name='+new_model_name
             response = requests.post(url, files=files)
         
